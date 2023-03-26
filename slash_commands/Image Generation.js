@@ -23,13 +23,23 @@ run: async (client, interaction) => {
         prompt: query,
         n: 1,
         size: "1024x1024",
-      });
+      }).catch(error => {
+        if(error.response.status === 400){
+          const embed = new EmbedBuilder()  
+          .setAuthor({ name: BotName })
+          .setThumbnail(BotIcon)
+          .setDescription(`${error.response.data.error.message}`)
+          return interaction.followUp({ embeds: [embed] }) 
+        }
+      })
 
+if(response.status !== 200) { return } else {
 const embed = new EmbedBuilder()  
 .setAuthor({ name: BotName })
 .setDescription(MadeBy)
 .setThumbnail(BotIcon)
 .setImage(response.data.data[0].url)
 return interaction.followUp({ embeds: [embed] })
+}
 }
 }
